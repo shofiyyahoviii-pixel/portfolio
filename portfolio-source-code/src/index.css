@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 36 33% 93%;
+    --foreground: 230 20% 13%;
+    --card: 0 0% 100%;
+    --card-foreground: 230 20% 13%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 230 20% 13%;
+    --primary: 207 40% 41%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 30% 80%;
+    --secondary-foreground: 230 20% 13%;
+    --muted: 36 20% 88%;
+    --muted-foreground: 230 10% 40%;
+    --accent: 46 65% 75%;
+    --accent-foreground: 230 20% 13%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 36 15% 82%;
+    --input: 36 15% 82%;
+    --ring: 207 40% 41%;
+    --radius: 1rem;
+
+    --cream: 36 33% 93%;
+    --blue-card: 210 30% 80%;
+    --grey-card: 0 0% 67%;
+    --dark: 240 20% 13%;
+    --blue-text: 207 55% 41%;
+    --yellow-badge: 46 55% 75%;
+    --yellow-accent: 46 85% 62%;
+    --dark-section: 240 20% 13%;
+
+    --font-body: 'Space Mono', monospace;
+    --font-heading: 'Playfair Display', serif;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    @apply bg-background text-foreground;
+  }
+
+  /* FIX 1 — Global grain texture overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.22;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 150px 150px;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer components {
+  /* FIX 3 — Background */
+  .mesh-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: #F5F0E8;
+  }
+
+  .mesh-blob {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .mesh-blob--blue {
+    width: 500px;
+    height: 500px;
+    bottom: -150px;
+    left: -150px;
+    background: radial-gradient(circle, rgba(90,140,200,0.5) 0%, transparent 70%);
+  }
+
+  .mesh-blob--orange {
+    width: 480px;
+    height: 480px;
+    top: -120px;
+    right: -120px;
+    background: radial-gradient(circle, rgba(220,150,80,0.4) 0%, transparent 70%);
+  }
+
+  .frosted-nav {
+    backdrop-filter: blur(16px) saturate(1.2);
+    background: hsl(var(--cream) / 0.7);
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  /* Card grain texture */
+  .card-grain {
+    position: relative;
+  }
+  .card-grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.09;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    z-index: 1;
+  }
+
+  .figma-frame {
+    position: relative;
+    border: 2px solid hsl(var(--blue-text));
+  }
+
+  .figma-frame::before,
+  .figma-frame::after,
+  .figma-frame .corner-bl,
+  .figma-frame .corner-br {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: hsl(var(--blue-text));
+    border: 1px solid hsl(var(--cream));
+  }
+
+  .figma-frame::before { top: -4px; left: -4px; }
+  .figma-frame::after { top: -4px; right: -4px; }
+  .figma-frame .corner-bl { bottom: -4px; left: -4px; }
+  .figma-frame .corner-br { bottom: -4px; right: -4px; }
+
+  /* Section labels */
+  .section-label {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: hsl(var(--primary));
+    font-weight: 700;
+  }
+
+  .pill-tag {
+    @apply px-3 py-1 rounded-full text-[11px] font-bold transition-all duration-300;
+    font-family: var(--font-body);
+    border: 1px solid hsl(var(--foreground));
+    cursor: default;
+  }
+
+  .pill-tag:hover {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border-color: hsl(var(--primary));
+    transform: translateY(-2px);
+  }
+
+  .pill-tag-filled {
+    @apply pill-tag;
+    background: hsl(var(--foreground));
+    color: hsl(var(--card));
+  }
+
+  .pill-tag-filled:hover {
+    background: hsl(var(--primary));
+    border-color: hsl(var(--primary));
+  }
+
+  .contact-row {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+  }
+
+  .contact-row:hover {
+    @apply translate-x-1;
+    background: hsl(var(--foreground));
+    color: hsl(var(--card));
+  }
+
+  /* Tools carousel */
+  .tools-carousel-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    overflow: hidden;
+  }
+
+  .tools-carousel-track {
+    display: flex;
+    width: max-content;
+    animation: scroll-tools 35s linear infinite;
+  }
+
+  .tools-carousel-mask:hover .tools-carousel-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes scroll-tools {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+}
